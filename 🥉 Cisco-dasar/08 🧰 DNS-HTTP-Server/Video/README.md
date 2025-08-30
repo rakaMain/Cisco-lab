@@ -2,9 +2,7 @@
   <a href="https://youtu.be/rY6FQgSHadU?si=EsqcniD1iD9kXlr9">
     <img src="https://ytcards.demolab.com/?id=rY6FQgSHadU&title=Konfigurasi+HTTP+Server+dan+DNS+server+di+Cisco+Packet+Tracer&lang=en&timestamp=1753290000&background_color=%230d1117&title_color=%23ffffff&stats_color=%23dedede&max_title_lines=1&width=350&border_radius=8" alt="Konfigurasi HTTP Server dan DNS server di Cisco Packet Tracer" />
   </a>
-  <a>
     Di video kali ini kita akan belajar tentang cara konfigurasi DNS dan HTTP Server di Cisco Packet Tracer sehingga client dapat mengakses website menggunakan domain name dan melihat halaman web yang telah    dikonfigurasi.
-  </a>
 </p>
 ⚡ Langkah  langkah:
  Setup topologi jaringan
