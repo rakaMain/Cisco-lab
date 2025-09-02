@@ -1,4 +1,3 @@
-```html
 <p align="left">
   <a href="https://youtu.be/VvVMhdPMmeA?si=HD-df3MAIaJzISZX">
     <img src="https://ytcards.demolab.com/?id=VvVMhdPMmeA&title=Tutorial+Cisco+Packet+Tracer&lang=en&background_color=%230d1117&title_color=%23ffffff&stats_color=%23dedede&max_title_lines=1&width=350&border_radius=8" alt="Tutorial Cisco Packet Tracer" />
@@ -35,6 +34,3 @@ Di video kali ini kita akan belajar tentang cara konfigurasi dasar di Cisco Pack
 Sekian dan terima kasih!
 
 Jangan lupa like, comment and subscribe untuk konten networking lainnya! 🚀
-```
-
-Mau saya ambil **judul resmi video** dan menyesuaikan bagian langkah / tags agar persis sesuai isi videonya (saya akan memasukkan judul yang akurat dan menambahkan timestamps jika diperlukan)?
