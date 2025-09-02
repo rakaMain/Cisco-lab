@@ -1,7 +1,7 @@
-# 🛠️ Konfigurasi DNS & HTTP Server — Cisco Packet Tracer Lab
+# 🛠️ Konfigurasi Basic Switch — Cisco Packet Tracer Lab
 
-**Deskripsi singkat:**  
-Lab ini memperagakan cara menyiapkan layanan HTTP dan DNS pada jaringan lokal sehingga dua PC client dapat mengakses `raka.com` dan diarahkan ke IP server HTTP (`192.168.1.1`) melalui DNS yang kita konfigurasikan.
+**Deskripsi singkat:**
+Lab ini memperagakan cara menghubungkan beberapa PC menggunakan sebuah switch pada jaringan lokal sehingga setiap PC dapat saling berkomunikasi (ping, file sharing sederhana, dan akses layanan dasar). Cocok untuk pemula yang ingin memahami konsep switching dasar, alamat IP, dan verifikasi konektivitas.
 
 ---
 
@@ -11,109 +11,68 @@ Lab ini memperagakan cara menyiapkan layanan HTTP dan DNS pada jaringan lokal se
 
 **Perangkat:**
 
-- **HTTP Server** (`raka.com`) — `192.168.1.1`
-    
-- **DNS Server** (A record: `raka.com` → `192.168.1.1`) — `192.168.1.4`
-    
-- **PC Client 1** — `192.168.1.2`
-    
-- **PC Client 2** — `192.168.1.3`
-    
-- **Switch** — menghubungkan semua device di jaringan
-    
+* **PC1** — `192.168.1.1 /24`
+* **PC2** — `192.168.1.2 /24`
+* **PC3** — `192.168.1.3 /24`
+* **PC4** — `192.168.1.4 /24`
+* **PC5** — `192.168.1.5 /24`
+* **PC6** — `192.168.1.6 /24`
+* **Switch (Layer 2)** — menghubungkan semua PC di jaringan
 
-> Semua device gunakan gateway dan subnet mask yang sesuai jika diperlukan (mis. gateway jika terhubung ke router). Untuk lab sederhana ini, cukup gunakan switch dan alamat IP di jaringan `192.168.1.0/24`.
+> Semua device gunakan subnet mask `255.255.255.0`. Pada lab sederhana ini tidak diperlukan gateway kecuali bila ingin menambahkan router untuk mengakses jaringan lain.
 
 ---
 
 ## 🔬 Fungsi Lab
 
-- DNS Server akan menerjemahkan nama domain `raka.com` menjadi alamat IP `192.168.1.1`.
-    
-- HTTP Server menyajikan konten web (halaman HTML) yang akan diakses melalui browser client.
-    
-- PC client menggunakan konfigurasi DNS di pengaturan jaringannya untuk melakukan resolusi nama domain sebelum membuka halaman web.
-    
-
-Singkatnya: **Client → DNS resolve `raka.com` → dapatkan `192.168.1.1` → request HTTP ke `192.168.1.1` → tampil halaman.**
+* Mempraktikkan pengkabelan dan koneksi fisik antar perangkat menggunakan switch.
+* Memahami cara memberi alamat IP statis pada PC dalam satu jaringan.
+* Menguji konektivitas antar host (ICMP/ping) melalui switch.
+* Mengenal perilaku switch Layer 2 (forwarding berbasis MAC address) dan cara memeriksa tabel MAC.
 
 ---
 
 ## ✅ Manfaat / Pembelajaran
 
-- 🔎 **Memahami mekanisme DNS**: bagaimana nama domain diterjemahkan menjadi IP.
-    
-- 🌐 **Praktik hosting web dasar**: men-deploy layanan HTTP pada server lokal.
-    
-- 🧭 **Konfigurasi layanan di Packet Tracer**: IP assignment, service configuration, dan verifikasi.
-    
-- 🛠️ **Troubleshooting dasar layanan jaringan**: cara cek DNS, ping, dan akses HTTP untuk menemukan masalah.
-    
-- 📚 **Dasar penerapan konsep nyata** yang bisa diterapkan pada jaringan skala kecil hingga menengah.
-    
+* 🔌 **Dasar pengkabelan jaringan**: tipe kabel dan port yang digunakan pada switch dan PC.
+* 🧠 **Konsep switching**: cara switch mempelajari alamat MAC dan meneruskan frame ke port yang sesuai.
+* 🔍 **Verifikasi konektivitas**: penggunaan `ping`, `arp`, dan pemeriksaan status interface.
+* 🛠️ **Troubleshooting awal**: cek koneksi fisik, konfigurasi IP, dan status port switch.
+* 📚 **Fondasi untuk topologi lebih kompleks** seperti VLAN atau routing antar jaringan.
 
 ---
 
 ## ⚙️ Langkah Singkat (Panduan Pelaksanaan)
 
-1. **Siapkan topology**: letakkan 1 switch, 2 PC, 2 Server (HTTP & DNS) di Packet Tracer.
-    
-2. **Atur IP** pada tiap device sesuai tabel Topologi.
-    
-3. **Konfigurasikan HTTP Server** (`192.168.1.1`): aktifkan service HTTP, unggah file `index.html` sederhana.
-    
-4. **Konfigurasikan DNS Server** (`192.168.1.4`): buat A record `raka.com` → `192.168.1.1`.
-    
-5. **Set DNS di tiap PC**: pada pengaturan IP client, masukkan alamat DNS `192.168.1.4`.
-    
-6. **Uji koneksi**: buka web browser di PC, akses `http://raka.com` → halaman dari HTTP server harus tampil.
-    
-7. **Verifikasi tambahan**: `ping raka.com` harus resolve menjadi `192.168.1.1` sebelum ping berjalan.
-    
+1. **Siapkan topology**: letakkan 1 switch (Layer 2) dan 6 PC di Packet Tracer. Sambungkan tiap PC ke switch menggunakan kabel straight-through.
+2. **Atur IP** pada tiap PC sesuai tabel Topologi: masukkan IP dan subnet mask `255.255.255.0`.
+3. **Periksa koneksi fisik**: pastikan port pada switch menunjukkan `up` (link up) dan kabel terpasang ke port yang benar.
+4. **Uji konektivitas dasar**:
+
+   * Dari PC1: `ping 192.168.1.2` (PC2), `ping 192.168.1.3` (PC3), dst.
+5. **Cek ARP dan MAC**:
+
+   * Pada PC, jalankan `arp -a` untuk melihat entri ARP.
+   * Pada switch (jika mendukung CLI), lihat MAC address table: `show mac address-table`.
+6. **(Opsional) Sharing file sederhana**: aktifkan layanan simple HTTP/FTP pada salah satu PC/server dan coba akses dari PC lain untuk menguji layanan pada layer-3 aplikasi.
+7. **Verifikasi tambahan**: pastikan ping dari setiap PC ke setiap PC lain mendapat balasan (reply).
 
 ---
 
 ## 🔍 Expected Result / Verifikasi
 
-- `raka.com` terselesaikan (resolved) menjadi `192.168.1.1`.
-    
-- Browser pada PC1 & PC2 menampilkan halaman `index.html` dari HTTP server.
-    
-- Perintah `ping raka.com` berhasil (reply dari `192.168.1.1`).
-    
-- Jika `nslookup` tersedia: `nslookup raka.com 192.168.1.4` mengembalikan A record yang benar.
-    
+* Semua PC dapat saling melakukan ping (mis. dari `192.168.1.1` ke `192.168.1.6`).
+* Tabel MAC pada switch menampilkan alamat MAC untuk setiap port yang terhubung.
+* Entri ARP di masing-masing PC menunjukkan pemetaan IP → MAC untuk host lain.
+* Jika layanan sederhana diaktifkan (mis. HTTP), PC lain dapat mengakses layanan tersebut menggunakan IP server.
 
----
-
-## 🛟 Troubleshooting (Masalah Umum & Solusi)
-
-- **Tidak bisa resolve nama?**
-    
-    - Pastikan DNS server IP tercantum di konfigurasi network client.
-        
-    - Cek service DNS di server (service DNS aktif dan A record benar).
-        
-- **Tidak bisa akses HTTP meski resolve benar?**
-    
-    - Periksa service HTTP aktif di server dan file `index.html` ada.
-        
-    - Pastikan firewall (jika digunakan) mengizinkan port 80.
-        
-- **Ping gagal antar device?**
-    
-    - Periksa subnet mask dan physical connection (cable + port switch).
-        
-    - Pastikan interface di server/PC dalam keadaan `up`.
-        
 
 ---
 
 ## 📌 Metadata
 
-- **Author:** Raka
-    
-- **Lab:** Konfigurasi DNS & HTTP Server
-    
-- **Tanggal:** 2025-08-30
-    
+* **Author:** Raka
+* **Lab:** Basic Switch
+* **Tanggal:** 2025-09-02
+
+---
