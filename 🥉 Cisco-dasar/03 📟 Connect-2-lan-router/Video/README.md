@@ -32,4 +32,4 @@ Di video kali ini kita akan belajar tentang cara menggunakan **switch** untuk me
 
 Sekian dan terima kasih!
 
-Jangan lupa like, comment and subscribe untuk konten networking lainnya! 🚀
+Jangan lupa like, comment and subscribe untuk konten networking lainnya! 

@@ -1,7 +1,7 @@
-# 🛠️ Konfigurasi DNS & HTTP Server — Cisco Packet Tracer Lab
+# 🛠️ Access Point Dasar — Cisco Packet Tracer Lab
 
-**Deskripsi singkat:**  
-Lab ini memperagakan cara menyiapkan layanan HTTP dan DNS pada jaringan lokal sehingga dua PC client dapat mengakses `raka.com` dan diarahkan ke IP server HTTP (`192.168.1.1`) melalui DNS yang kita konfigurasikan.
+**Deskripsi singkat:**
+Lab ini memperagakan cara menghubungkan beberapa device (PC, Laptop, Smartphone) ke jaringan nirkabel menggunakan Access Point di Cisco Packet Tracer. Setiap perangkat menggunakan **IP statik** yang ditetapkan manual sehingga peserta belajar cara memasang module nirkabel pada PC/Laptop, mengonfigurasi SSID pada Access Point, dan memastikan konektivitas antar device di jaringan `192.168.1.0/24`.
 
 ---
 
@@ -11,109 +11,102 @@ Lab ini memperagakan cara menyiapkan layanan HTTP dan DNS pada jaringan lokal se
 
 **Perangkat:**
 
-- **HTTP Server** (`raka.com`) — `192.168.1.1`
-    
-- **DNS Server** (A record: `raka.com` → `192.168.1.1`) — `192.168.1.4`
-    
-- **PC Client 1** — `192.168.1.2`
-    
-- **PC Client 2** — `192.168.1.3`
-    
-- **Switch** — menghubungkan semua device di jaringan
-    
+* **Access Point / Wireless Router** — (SSID: `RakaNet`) — mis. alamat manajemen `192.168.1.10` (opsional)
+* **PC0** — `192.168.1.1 /24` (menggunakan module VMP300N pada slot LAN agar bisa terhubung Wi-Fi)
+* **Laptop** — `192.168.1.2 /24` (menggunakan module VMP300N pada slot LAN agar bisa terhubung Wi-Fi)
+* **Smartphone** — `192.168.1.3 /24` (terhubung ke SSID `RakaNet`)
+* **Switch** — (opsional, untuk menghubungkan AP ke jaringan kabel jika diperlukan)
 
-> Semua device gunakan gateway dan subnet mask yang sesuai jika diperlukan (mis. gateway jika terhubung ke router). Untuk lab sederhana ini, cukup gunakan switch dan alamat IP di jaringan `192.168.1.0/24`.
+> Untuk lab sederhana ini, jika tidak ada router/gateway eksternal, **tidak wajib** mengisi gateway. Jika ingin mensimulasikan akses ke internet atau routing, tetapkan gateway sesuai topologi (mis. `192.168.1.254`).
 
 ---
 
 ## 🔬 Fungsi Lab
 
-- DNS Server akan menerjemahkan nama domain `raka.com` menjadi alamat IP `192.168.1.1`.
-    
-- HTTP Server menyajikan konten web (halaman HTML) yang akan diakses melalui browser client.
-    
-- PC client menggunakan konfigurasi DNS di pengaturan jaringannya untuk melakukan resolusi nama domain sebelum membuka halaman web.
-    
-
-Singkatnya: **Client → DNS resolve `raka.com` → dapatkan `192.168.1.1` → request HTTP ke `192.168.1.1` → tampil halaman.**
+* Menghubungkan perangkat-klien ke **Access Point** menggunakan koneksi nirkabel di Packet Tracer.
+* Melatih **pemasangan module VMP300N** pada PC/Laptop agar perangkat dapat menggunakan interface Wi-Fi di Packet Tracer.
+* Mengatur **IP statik** pada setiap device dan memastikan konektivitas antar device melalui jaringan Wi-Fi.
+* Memahami konfigurasi SSID, keamanan (WPA2 PSK sederhana), dan verifikasi koneksi.
 
 ---
 
 ## ✅ Manfaat / Pembelajaran
 
-- 🔎 **Memahami mekanisme DNS**: bagaimana nama domain diterjemahkan menjadi IP.
-    
-- 🌐 **Praktik hosting web dasar**: men-deploy layanan HTTP pada server lokal.
-    
-- 🧭 **Konfigurasi layanan di Packet Tracer**: IP assignment, service configuration, dan verifikasi.
-    
-- 🛠️ **Troubleshooting dasar layanan jaringan**: cara cek DNS, ping, dan akses HTTP untuk menemukan masalah.
-    
-- 📚 **Dasar penerapan konsep nyata** yang bisa diterapkan pada jaringan skala kecil hingga menengah.
-    
+* 📡 **Memahami dasar wireless networking**: SSID, authentication, dan IP statik pada perangkat nirkabel.
+* 🛠️ **Praktik hardware virtual**: memasang module VMP300N pada PC/Laptop di Packet Tracer.
+* 🔍 **Troubleshooting Wi-Fi dasar**: cek konfigurasi module, SSID, IP, dan jangkauan sinyal.
+* 🧭 **Konsep alamat statik vs DHCP**: kapan gunakan IP statik dan bagaimana pengaruhnya pada konektivitas.
+* 📚 **Persiapan untuk topologi lebih kompleks**: menambahkan router, gateway, atau layanan jaringan lain.
+
+---
+
+## ⚙️ Langkah Khusus (Module VMP300N)
+
+1. Pilih **PC0** atau **Laptop** → buka tab **Physical**.
+2. Matikan (power off) device jika perlu.
+3. Cari **module VMP300N** (wireless NIC) di daftar modul.
+4. Lepas LAN module lama (jika menghalangi) lalu **seret & letakkan VMP300N** ke slot yang tersedia.
+5. Nyalakan kembali device (jika diminta).
+6. Setelah module terpasang, buka tab **Desktop → PC Wireless** (atau Wireless configuration) untuk melihat adapter nirkabel dan scan SSID.
+
+> Catatan: langkah UI bisa sedikit berbeda tergantung versi Packet Tracer; intinya adalah memasang modul wireless (VMP300N) ke slot fisik perangkat agar muncul interface Wi-Fi.
 
 ---
 
 ## ⚙️ Langkah Singkat (Panduan Pelaksanaan)
 
-1. **Siapkan topology**: letakkan 1 switch, 2 PC, 2 Server (HTTP & DNS) di Packet Tracer.
-    
-2. **Atur IP** pada tiap device sesuai tabel Topologi.
-    
-3. **Konfigurasikan HTTP Server** (`192.168.1.1`): aktifkan service HTTP, unggah file `index.html` sederhana.
-    
-4. **Konfigurasikan DNS Server** (`192.168.1.4`): buat A record `raka.com` → `192.168.1.1`.
-    
-5. **Set DNS di tiap PC**: pada pengaturan IP client, masukkan alamat DNS `192.168.1.4`.
-    
-6. **Uji koneksi**: buka web browser di PC, akses `http://raka.com` → halaman dari HTTP server harus tampil.
-    
-7. **Verifikasi tambahan**: `ping raka.com` harus resolve menjadi `192.168.1.1` sebelum ping berjalan.
-    
+1. **Siapkan topology**: letakkan 1 Access Point (atau Wireless Router), 1 switch (opsional), PC0, Laptop, dan Smartphone di Packet Tracer.
+2. **Pasang module VMP300N** pada PC0 dan Laptop (lihat langkah khusus).
+3. **Atur IP statik** pada tiap device:
+
+   * PC0: `192.168.1.1 /24`
+   * Laptop: `192.168.1.2 /24`
+   * Smartphone: `192.168.1.3 /24`
+     (Gateway dikosongkan kecuali Anda menambahkan router.)
+4. **Konfigurasikan Access Point**:
+
+   * SSID: `RakaNet`
+   * Security: WPA2 Personal (PSK) — Password: `rakapass123` (contoh)
+   * Channel & mode: default / auto
+5. **Connect devices** ke SSID `RakaNet` melalui konfigurasi wireless pada PC/Laptop/Smartphone di Packet Tracer.
+6. **Uji koneksi**: dari PC/Laptop/Smartphone jalankan `ping` ke IP perangkat lain (mis. `ping 192.168.1.2` dari PC0).
+7. **Verifikasi tambahan**: cek status wireless adapter (connected, SSID, signal strength) pada masing-masing device.
 
 ---
 
 ## 🔍 Expected Result / Verifikasi
 
-- `raka.com` terselesaikan (resolved) menjadi `192.168.1.1`.
-    
-- Browser pada PC1 & PC2 menampilkan halaman `index.html` dari HTTP server.
-    
-- Perintah `ping raka.com` berhasil (reply dari `192.168.1.1`).
-    
-- Jika `nslookup` tersedia: `nslookup raka.com 192.168.1.4` mengembalikan A record yang benar.
-    
+* Semua device terhubung ke SSID `RakaNet` dan menampilkan status **connected** pada wireless adapter.
+* `ping 192.168.1.1` / `ping 192.168.1.2` / `ping 192.168.1.3` menghasilkan reply antar perangkat.
+* Device dapat saling melakukan ARP/resolve MAC address (cek tabel ARP jika tersedia).
+* Jika Access Point memiliki halaman manajemen, Anda dapat melihat daftar client terhubung (Client List) yang berisi `192.168.1.1`, `192.168.1.2`, dan `192.168.1.3`.
 
 ---
 
 ## 🛟 Troubleshooting (Masalah Umum & Solusi)
 
-- **Tidak bisa resolve nama?**
-    
-    - Pastikan DNS server IP tercantum di konfigurasi network client.
-        
-    - Cek service DNS di server (service DNS aktif dan A record benar).
-        
-- **Tidak bisa akses HTTP meski resolve benar?**
-    
-    - Periksa service HTTP aktif di server dan file `index.html` ada.
-        
-    - Pastikan firewall (jika digunakan) mengizinkan port 80.
-        
-- **Ping gagal antar device?**
-    
-    - Periksa subnet mask dan physical connection (cable + port switch).
-        
-    - Pastikan interface di server/PC dalam keadaan `up`.
-        
+* **Perangkat tidak menemukan SSID?**
+
+  * Pastikan module VMP300N sudah terpasang dan adapter wireless aktif di device.
+  * Periksa SSID dan channel pada Access Point (jangan set ke hidden SSID).
+* **Terhubung ke SSID tapi tidak bisa ping?**
+
+  * Pastikan IP statik diisi dengan benar (subnet mask `/24`).
+  * Cek apakah ada konflik IP (dua device dengan IP sama).
+  * Cek pengaturan firewall di perangkat (jika ada) yang memblok ICMP.
+* **Signal lemah / koneksi terputus?**
+
+  * Periksa jarak/jangkauan Access Point di Packet Tracer (posisi perangkat).
+  * Coba ubah channel atau mode wireless pada AP.
+* **Module VMP300N tidak muncul di daftar modul?**
+
+  * Gunakan device yang mendukung module atau periksa versi Packet Tracer; alternatif: gunakan laptop yang sudah memiliki Wi-Fi built-in di modelnya.
 
 ---
 
 ## 📌 Metadata
 
-- **Author:** Raka
-    
-- **Lab:** Konfigurasi DNS & HTTP Server
-    
-- **Tanggal:** 2025-08-30
-    
+* **Author:** Raka
+* **Lab:** Access Point Dasar
+* **Tanggal:** 2025-09-04
+
