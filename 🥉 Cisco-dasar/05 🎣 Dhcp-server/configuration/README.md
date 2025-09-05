@@ -1,7 +1,7 @@
-# 🛠️ Konfigurasi DNS & HTTP Server — Cisco Packet Tracer Lab
+# 🛠️ Konfigurasi DHCP Server — Cisco Packet Tracer Lab
 
-**Deskripsi singkat:**  
-Lab ini memperagakan cara menyiapkan layanan HTTP dan DNS pada jaringan lokal sehingga dua PC client dapat mengakses `raka.com` dan diarahkan ke IP server HTTP (`192.168.1.1`) melalui DNS yang kita konfigurasikan.
+**Deskripsi singkat:**
+Lab ini memperagakan cara men-setup DHCP di Cisco Packet Tracer sehingga PC klien menerima konfigurasi IP secara dinamis (otomatis) tanpa perlu konfigurasi manual.
 
 ---
 
@@ -11,109 +11,53 @@ Lab ini memperagakan cara menyiapkan layanan HTTP dan DNS pada jaringan lokal se
 
 **Perangkat:**
 
-- **HTTP Server** (`raka.com`) — `192.168.1.1`
-    
-- **DNS Server** (A record: `raka.com` → `192.168.1.1`) — `192.168.1.4`
-    
-- **PC Client 1** — `192.168.1.2`
-    
-- **PC Client 2** — `192.168.1.3`
-    
-- **Switch** — menghubungkan semua device di jaringan
-    
+* **DHCP Server / Router (menyediakan DHCP)** — `192.168.1.1`
+  *(menggunakan server)*
 
-> Semua device gunakan gateway dan subnet mask yang sesuai jika diperlukan (mis. gateway jika terhubung ke router). Untuk lab sederhana ini, cukup gunakan switch dan alamat IP di jaringan `192.168.1.0/24`.
+* **PC Client 1** — \[DHCP] (mengharapkan IP dari `192.168.1.10` sampai `192.168.1.19`)
+
+* **PC Client 2** — \[DHCP]
+
+* **PC Client 3** — \[DHCP]
+
+* **Switch** — menghubungkan semua device di jaringan
+
+> Untuk pool 10 client, IP yang akan diberikan umumnya `192.168.1.10` — `192.168.1.19`. Pastikan alamat statis (seperti `.1`) dikecualikan dari pool.
 
 ---
 
 ## 🔬 Fungsi Lab
 
-- DNS Server akan menerjemahkan nama domain `raka.com` menjadi alamat IP `192.168.1.1`.
-    
-- HTTP Server menyajikan konten web (halaman HTML) yang akan diakses melalui browser client.
-    
-- PC client menggunakan konfigurasi DNS di pengaturan jaringannya untuk melakukan resolusi nama domain sebelum membuka halaman web.
-    
-
-Singkatnya: **Client → DNS resolve `raka.com` → dapatkan `192.168.1.1` → request HTTP ke `192.168.1.1` → tampil halaman.**
+* DHCP Server memberikan IP secara dinamis kepada PC sehingga user tidak perlu konfigurasi manual.
+* Memberikan parameter jaringan tambahan ke klien seperti default-gateway dan domain-name (atau DNS jika diperlukan).
+* Praktik ini berguna untuk memahami manajemen alamat IP otomatis pada jaringan lokal.
 
 ---
 
 ## ✅ Manfaat / Pembelajaran
 
-- 🔎 **Memahami mekanisme DNS**: bagaimana nama domain diterjemahkan menjadi IP.
-    
-- 🌐 **Praktik hosting web dasar**: men-deploy layanan HTTP pada server lokal.
-    
-- 🧭 **Konfigurasi layanan di Packet Tracer**: IP assignment, service configuration, dan verifikasi.
-    
-- 🛠️ **Troubleshooting dasar layanan jaringan**: cara cek DNS, ping, dan akses HTTP untuk menemukan masalah.
-    
-- 📚 **Dasar penerapan konsep nyata** yang bisa diterapkan pada jaringan skala kecil hingga menengah.
-    
-
----
-
-## ⚙️ Langkah Singkat (Panduan Pelaksanaan)
-
-1. **Siapkan topology**: letakkan 1 switch, 2 PC, 2 Server (HTTP & DNS) di Packet Tracer.
-    
-2. **Atur IP** pada tiap device sesuai tabel Topologi.
-    
-3. **Konfigurasikan HTTP Server** (`192.168.1.1`): aktifkan service HTTP, unggah file `index.html` sederhana.
-    
-4. **Konfigurasikan DNS Server** (`192.168.1.4`): buat A record `raka.com` → `192.168.1.1`.
-    
-5. **Set DNS di tiap PC**: pada pengaturan IP client, masukkan alamat DNS `192.168.1.4`.
-    
-6. **Uji koneksi**: buka web browser di PC, akses `http://raka.com` → halaman dari HTTP server harus tampil.
-    
-7. **Verifikasi tambahan**: `ping raka.com` harus resolve menjadi `192.168.1.1` sebelum ping berjalan.
-    
+* ⚡ **Otomatisasi konfigurasi IP** pada jaringan kecil/menengah.
+* 🧩 **Menghindari konflik IP** dengan penggunaan excluded-address dan pengelolaan pool yang benar.
+* 🔁 **Verifikasi & troubleshooting DHCP**: memeriksa binding, lease, dan alokasi alamat.
+* 📚 **Pengenalan perintah Cisco dasar untuk DHCP** (berguna untuk lab dan persiapan sertifikasi dasar).
 
 ---
 
 ## 🔍 Expected Result / Verifikasi
 
-- `raka.com` terselesaikan (resolved) menjadi `192.168.1.1`.
-    
-- Browser pada PC1 & PC2 menampilkan halaman `index.html` dari HTTP server.
-    
-- Perintah `ping raka.com` berhasil (reply dari `192.168.1.1`).
-    
-- Jika `nslookup` tersedia: `nslookup raka.com 192.168.1.4` mengembalikan A record yang benar.
-    
+* PC1, PC2, PC3 menerima IP secara otomatis dalam rentang `192.168.1.10` — `192.168.1.19`.
+* `show ip dhcp binding` di server menampilkan binding IP → MAC untuk masing-masing PC.
+* `ping 192.168.1.1` dari tiap PC berhasil (reply).
+* Gateway pada PC ter-set ke `192.168.1.1`.
+* Jika DNS diatur, pengujian name resolution (jika ada service DNS) harus sesuai.
 
----
-
-## 🛟 Troubleshooting (Masalah Umum & Solusi)
-
-- **Tidak bisa resolve nama?**
-    
-    - Pastikan DNS server IP tercantum di konfigurasi network client.
-        
-    - Cek service DNS di server (service DNS aktif dan A record benar).
-        
-- **Tidak bisa akses HTTP meski resolve benar?**
-    
-    - Periksa service HTTP aktif di server dan file `index.html` ada.
-        
-    - Pastikan firewall (jika digunakan) mengizinkan port 80.
-        
-- **Ping gagal antar device?**
-    
-    - Periksa subnet mask dan physical connection (cable + port switch).
-        
-    - Pastikan interface di server/PC dalam keadaan `up`.
-        
 
 ---
 
 ## 📌 Metadata
 
-- **Author:** Raka
-    
-- **Lab:** Konfigurasi DNS & HTTP Server
-    
-- **Tanggal:** 2025-08-30
-    
+* **Author:** Raka
+* **Lab:** DHCP Server di Cisco Packet Tracer
+* **Tanggal:** 2025-09-05
+
+---
