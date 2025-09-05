@@ -1,4 +1,3 @@
-```html
 <p align="left">
   <a href="https://youtu.be/l3tW8VT_18U?si=3K7QMPVTrBL_IBex">
     <img src="https://ytcards.demolab.com/?id=l3tW8VT_18U&title=Konfigurasi+HTTP+Server+dan+DNS+server+di+Cisco+Packet+Tracer&lang=en&timestamp=1753290000&background_color=%230d1117&title_color=%23ffffff&stats_color=%23dedede&max_title_lines=1&width=350&border_radius=8" alt="Konfigurasi HTTP Server dan DNS server di Cisco Packet Tracer" />
@@ -37,4 +36,4 @@ Di video kali ini kita akan belajar tentang cara konfigurasi DNS dan HTTP Server
 Sekian dan terima kasih!
 
 Jangan lupa like, comment and subscribe untuk konten networking lainnya! 🚀
-```
+
