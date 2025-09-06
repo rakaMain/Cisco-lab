@@ -1,7 +1,7 @@
-# 🛠️ Konfigurasi DNS & HTTP Server — Cisco Packet Tracer Lab
+# 🛠️ Konfigurasi Mail Server — Cisco Packet Tracer Lab
 
-**Deskripsi singkat:**  
-Lab ini memperagakan cara menyiapkan layanan HTTP dan DNS pada jaringan lokal sehingga dua PC client dapat mengakses `raka.com` dan diarahkan ke IP server HTTP (`192.168.1.1`) melalui DNS yang kita konfigurasikan.
+**Deskripsi singkat:**
+Lab ini menunjukkan cara membuat mail server sederhana di Cisco Packet Tracer untuk menampung dan mengirim pesan antar pengguna dalam jaringan lokal.
 
 ---
 
@@ -11,109 +11,123 @@ Lab ini memperagakan cara menyiapkan layanan HTTP dan DNS pada jaringan lokal se
 
 **Perangkat:**
 
-- **HTTP Server** (`raka.com`) — `192.168.1.1`
-    
-- **DNS Server** (A record: `raka.com` → `192.168.1.1`) — `192.168.1.4`
-    
-- **PC Client 1** — `192.168.1.2`
-    
-- **PC Client 2** — `192.168.1.3`
-    
-- **Switch** — menghubungkan semua device di jaringan
-    
+* **Mail Server** (Domain: `gmail.com`) — `192.168.1.1`
 
-> Semua device gunakan gateway dan subnet mask yang sesuai jika diperlukan (mis. gateway jika terhubung ke router). Untuk lab sederhana ini, cukup gunakan switch dan alamat IP di jaringan `192.168.1.0/24`.
+* **PC Client 1** — `192.168.1.2`
+
+* **PC Client 2** — `192.168.1.3`
+
+* **PC Client 3** — `192.168.1.4`
+
+* **Switch** — menghubungkan semua device di jaringan
+
+> Catatan: Pada lab ini domain diset sebagai `gmail.com` sesuai permintaan — ini hanya contoh untuk lab lokal. Dalam praktik nyata gunakan domain yang kamu miliki atau domain lokal (mis. `lab.local`) untuk menghindari konflik dengan layanan nyata.
+
+---
+
+## 🔐 Akun Pengguna (Contoh)
+
+* **raka** — `raka@gmail.com` / password: `123`
+* **sri** — `sri@gmail.com` / password: `123`
+* **bayu** — `bayu@gmail.com` / password: `123`
+
+> Format alamat email di lab: `username@domain` (mis. `raka@gmail.com`).
 
 ---
 
 ## 🔬 Fungsi Lab
 
-- DNS Server akan menerjemahkan nama domain `raka.com` menjadi alamat IP `192.168.1.1`.
-    
-- HTTP Server menyajikan konten web (halaman HTML) yang akan diakses melalui browser client.
-    
-- PC client menggunakan konfigurasi DNS di pengaturan jaringannya untuk melakukan resolusi nama domain sebelum membuka halaman web.
-    
-
-Singkatnya: **Client → DNS resolve `raka.com` → dapatkan `192.168.1.1` → request HTTP ke `192.168.1.1` → tampil halaman.**
+* Menyediakan layanan **SMTP** untuk pengiriman email antar user di jaringan lokal.
+* Menyediakan layanan **POP3** (atau IMAP jika diinginkan) untuk pengambilan pesan oleh client.
+* Menampung mailbox tiap user sehingga pesan dapat disimpan dan diambil kembali.
+* Melatih konfigurasi layanan email pada Server dan pengaturan client email di PC.
 
 ---
 
 ## ✅ Manfaat / Pembelajaran
 
-- 🔎 **Memahami mekanisme DNS**: bagaimana nama domain diterjemahkan menjadi IP.
-    
-- 🌐 **Praktik hosting web dasar**: men-deploy layanan HTTP pada server lokal.
-    
-- 🧭 **Konfigurasi layanan di Packet Tracer**: IP assignment, service configuration, dan verifikasi.
-    
-- 🛠️ **Troubleshooting dasar layanan jaringan**: cara cek DNS, ping, dan akses HTTP untuk menemukan masalah.
-    
-- 📚 **Dasar penerapan konsep nyata** yang bisa diterapkan pada jaringan skala kecil hingga menengah.
-    
+* 🔎 **Memahami protokol email dasar**: perbedaan peran SMTP (kirim) dan POP3/IMAP (ambil).
+* 📬 **Praktik konfigurasi mail server** di lingkungan simulasi (Packet Tracer).
+* 🧭 **Pengaturan akun dan autentikasi** untuk user email.
+* 🛠️ **Troubleshooting konektivitas dan autentikasi**: cara cek log, ping, dan pengaturan client.
 
 ---
 
 ## ⚙️ Langkah Singkat (Panduan Pelaksanaan)
 
-1. **Siapkan topology**: letakkan 1 switch, 2 PC, 2 Server (HTTP & DNS) di Packet Tracer.
-    
-2. **Atur IP** pada tiap device sesuai tabel Topologi.
-    
-3. **Konfigurasikan HTTP Server** (`192.168.1.1`): aktifkan service HTTP, unggah file `index.html` sederhana.
-    
-4. **Konfigurasikan DNS Server** (`192.168.1.4`): buat A record `raka.com` → `192.168.1.1`.
-    
-5. **Set DNS di tiap PC**: pada pengaturan IP client, masukkan alamat DNS `192.168.1.4`.
-    
-6. **Uji koneksi**: buka web browser di PC, akses `http://raka.com` → halaman dari HTTP server harus tampil.
-    
-7. **Verifikasi tambahan**: `ping raka.com` harus resolve menjadi `192.168.1.1` sebelum ping berjalan.
-    
+1. **Siapkan topology**: letakkan 1 switch, 3 PC, 1 Server di Packet Tracer dan hubungkan semua lewat switch.
+
+2. **Atur IP** pada tiap device sesuai tabel Topologi (sesuaikan gateway jika ada router; untuk lab sederhana router tidak diperlukan).
+
+3. **Konfigurasikan Mail Server (`192.168.1.1`)**:
+
+   * Buka device *Server* → tab **Services** → pilih **Email**.
+   * Set **Domain Name** menjadi `gmail.com` (atau domain lokal pilihanmu).
+   * Tambahkan user accounts dengan username dan password sesuai daftar (raka, sri, bayu).
+   * Pastikan service SMTP dan POP3 (atau IMAP) dalam keadaan **ON**.
+
+4. **Konfigurasikan masing‑masing PC client**:
+
+   * Buka PC → **Desktop** → **Email** (client mail bawaan Packet Tracer).
+   * Buat akun email baru dengan konfigurasi:
+
+     * **Email Address**: `raka@gmail.com` (sesuaikan untuk tiap user)
+     * **Password**: `123`
+     * **SMTP Server**: `192.168.1.1`
+     * **POP3 Server**: `192.168.1.1` (atau IMAP jika diaktifkan)
+   * Simpan konfigurasi.
+
+5. **Uji pengiriman pesan**:
+
+   * Dari PC1 (raka) kirim email ke `sri@gmail.com`.
+   * Buka mailbox pada PC2 (sri) dan lakukan **Get Mail** / **Check Mail** untuk menerima pesan.
+
+6. **Verifikasi tambahan**:
+
+   * `ping 192.168.1.1` dari setiap PC untuk memastikan konektivitas.
+   * Periksa log pada Server (jika tersedia) untuk melihat kegiatan SMTP/POP3.
 
 ---
 
 ## 🔍 Expected Result / Verifikasi
 
-- `raka.com` terselesaikan (resolved) menjadi `192.168.1.1`.
-    
-- Browser pada PC1 & PC2 menampilkan halaman `index.html` dari HTTP server.
-    
-- Perintah `ping raka.com` berhasil (reply dari `192.168.1.1`).
-    
-- Jika `nslookup` tersedia: `nslookup raka.com 192.168.1.4` mengembalikan A record yang benar.
-    
+* Pengguna dapat **login** ke mailbox mereka menggunakan username & password yang dibuat.
+* Email yang dikirim dari satu user dapat **diterima** oleh user lain di jaringan lokal.
+* `ping 192.168.1.1` mengembalikan reply dari mail server.
+* Jika `nslookup`/DNS tersedia dan digunakan, domain `gmail.com` bisa di-resolve ke `192.168.1.1` (opsional jika menambahkan DNS service pada server).
 
 ---
 
 ## 🛟 Troubleshooting (Masalah Umum & Solusi)
 
-- **Tidak bisa resolve nama?**
-    
-    - Pastikan DNS server IP tercantum di konfigurasi network client.
-        
-    - Cek service DNS di server (service DNS aktif dan A record benar).
-        
-- **Tidak bisa akses HTTP meski resolve benar?**
-    
-    - Periksa service HTTP aktif di server dan file `index.html` ada.
-        
-    - Pastikan firewall (jika digunakan) mengizinkan port 80.
-        
-- **Ping gagal antar device?**
-    
-    - Periksa subnet mask dan physical connection (cable + port switch).
-        
-    - Pastikan interface di server/PC dalam keadaan `up`.
-        
+* **Gagal login / authentication failed**:
+
+  * Periksa username dan password pada konfigurasi akun di Server.
+  * Pastikan client menggunakan password yang sama.
+
+* **Tidak bisa mengirim meski login berhasil**:
+
+  * Pastikan service **SMTP** aktif di server.
+  * Periksa pengaturan SMTP pada client (alamat server harus 192.168.1.1).
+
+* **Tidak bisa menerima (Get Mail gagal)**:
+
+  * Pastikan service **POP3/IMAP** aktif di server.
+  * Periksa koneksi jaringan (ping dari client ke server).
+
+* **Masalah konektivitas antar device**:
+
+  * Periksa IP, subnet mask, dan kabel pada switch.
+  * Pastikan interface pada server dan PC dalam keadaan `Up`.
+
+* **Konflik domain nyata (karena menggunakan `gmail.com`)**:
+
+  * Jika menyebabkan kebingungan, ganti domain lab ke domain lokal (mis. `lab.local` atau `raka.mail`) di pengaturan server.
 
 ---
 
 ## 📌 Metadata
 
-- **Author:** Raka
-    
-- **Lab:** Konfigurasi DNS & HTTP Server
-    
-- **Tanggal:** 2025-08-30
-    
+* **Author:** Raka
+* **Lab:** Konfigurasi Mail Server — Cisco Packet Tracer
+* **Tanggal:** 2025-09-06
