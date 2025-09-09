@@ -1,4 +1,3 @@
-```html
 <p align="left">
   <a href="https://youtu.be/ym1dZWlskZI?si=KjFVzZySQLMJROtx">
     <img src="https://ytcards.demolab.com/?id=ym1dZWlskZI&title=Cara+Membuat+FTP+Server+di+Cisco+Packet+Tracer+-+Dalam+6+menit&lang=en&background_color=%230d1117&title_color=%23ffffff&stats_color=%23dedede&max_title_lines=1&width=350&border_radius=8" alt="Cara Membuat FTP Server di Cisco Packet Tracer - Dalam 6 menit" />
@@ -34,4 +33,3 @@ Di video kali ini kita akan belajar tentang cara membuat dan mengkonfigurasi **F
 Sekian dan terima kasih!
 
 Jangan lupa like, comment and subscribe untuk konten networking lainnya! 🚀
-```
