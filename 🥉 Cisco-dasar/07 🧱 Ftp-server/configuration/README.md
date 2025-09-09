@@ -1,119 +1,103 @@
-# 🛠️ Konfigurasi DNS & HTTP Server — Cisco Packet Tracer Lab
+# 🛠️ Konfigurasi FTP Server — Cisco Packet Tracer Lab
 
-**Deskripsi singkat:**  
-Lab ini memperagakan cara menyiapkan layanan HTTP dan DNS pada jaringan lokal sehingga dua PC client dapat mengakses `raka.com` dan diarahkan ke IP server HTTP (`192.168.1.1`) melalui DNS yang kita konfigurasikan.
+**Deskripsi singkat:**
+Lab ini memperagakan cara menyiapkan layanan FTP (File Transfer Protocol) pada jaringan lokal menggunakan Cisco Packet Tracer. FTP server akan menyimpan file yang dapat diunggah, diunduh, dan dikelola oleh client melalui koneksi FTP. Dalam lab ini juga dibuat user `raka` yang memiliki akses penuh ke direktori FTP.
 
 ---
 
 ## 🔌 Topologi & Alamat
 
-**Network:** `192.168.1.0 / 24`
+**Network:** `192.168.1.0 /24`
 
 **Perangkat:**
 
-- **HTTP Server** (`raka.com`) — `192.168.1.1`
-    
-- **DNS Server** (A record: `raka.com` → `192.168.1.1`) — `192.168.1.4`
-    
-- **PC Client 1** — `192.168.1.2`
-    
-- **PC Client 2** — `192.168.1.3`
-    
-- **Switch** — menghubungkan semua device di jaringan
-    
+* **FTP Server** (`ftp.raka.local`) — `192.168.1.1 /24`
+* **PC Client 1 (PC0)** — `192.168.1.2 /24`
+* **PC Client 2 (PC1)** — `192.168.1.3 /24`
+* **Switch** — menghubungkan semua device di jaringan
 
-> Semua device gunakan gateway dan subnet mask yang sesuai jika diperlukan (mis. gateway jika terhubung ke router). Untuk lab sederhana ini, cukup gunakan switch dan alamat IP di jaringan `192.168.1.0/24`.
+> **Catatan:** Anda memberikan IP duplicate untuk PC. Saya mengasumsikan `PC0 = 192.168.1.2` dan `PC1 = 192.168.1.3` agar tidak terjadi konflik IP.
+
+> Semua device gunakan subnet mask `255.255.255.0`. Untuk lab sederhana ini tidak diperlukan router/gateway kecuali ingin menghubungkan jaringan lain.
 
 ---
 
 ## 🔬 Fungsi Lab
 
-- DNS Server akan menerjemahkan nama domain `raka.com` menjadi alamat IP `192.168.1.1`.
-    
-- HTTP Server menyajikan konten web (halaman HTML) yang akan diakses melalui browser client.
-    
-- PC client menggunakan konfigurasi DNS di pengaturan jaringannya untuk melakukan resolusi nama domain sebelum membuka halaman web.
-    
+* Menyiapkan layanan FTP pada server lokal (Packet Tracer Server).
+* Membuat user `raka` dengan akses penuh (read/write) ke direktori FTP.
+* Praktik mengunggah (upload) dan mengunduh (download) file menggunakan FTP client (FileZilla/Browser/Command Prompt jika tersedia di Packet Tracer).
 
-Singkatnya: **Client → DNS resolve `raka.com` → dapatkan `192.168.1.1` → request HTTP ke `192.168.1.1` → tampil halaman.**
+Singkatnya: **Client → koneksi FTP ke `192.168.1.1` (user=raka) → upload/download file.**
 
 ---
 
 ## ✅ Manfaat / Pembelajaran
 
-- 🔎 **Memahami mekanisme DNS**: bagaimana nama domain diterjemahkan menjadi IP.
-    
-- 🌐 **Praktik hosting web dasar**: men-deploy layanan HTTP pada server lokal.
-    
-- 🧭 **Konfigurasi layanan di Packet Tracer**: IP assignment, service configuration, dan verifikasi.
-    
-- 🛠️ **Troubleshooting dasar layanan jaringan**: cara cek DNS, ping, dan akses HTTP untuk menemukan masalah.
-    
-- 📚 **Dasar penerapan konsep nyata** yang bisa diterapkan pada jaringan skala kecil hingga menengah.
-    
+* 📁 **Memahami dasar FTP:** perbedaan upload vs download, user/authentication, dan permission.
+* 🔐 **Manajemen user:** membuat akun FTP dan mengatur hak akses.
+* 🛠️ **Konfigurasi layanan di Packet Tracer:** mengaktifkan service FTP, membuat direktori dan user.
+* 🧭 **Troubleshooting dasar layanan jaringan:** cek konektivitas, troubleshooting autentikasi, dan akses file.
 
 ---
 
 ## ⚙️ Langkah Singkat (Panduan Pelaksanaan)
 
-1. **Siapkan topology**: letakkan 1 switch, 2 PC, 2 Server (HTTP & DNS) di Packet Tracer.
-    
-2. **Atur IP** pada tiap device sesuai tabel Topologi.
-    
-3. **Konfigurasikan HTTP Server** (`192.168.1.1`): aktifkan service HTTP, unggah file `index.html` sederhana.
-    
-4. **Konfigurasikan DNS Server** (`192.168.1.4`): buat A record `raka.com` → `192.168.1.1`.
-    
-5. **Set DNS di tiap PC**: pada pengaturan IP client, masukkan alamat DNS `192.168.1.4`.
-    
-6. **Uji koneksi**: buka web browser di PC, akses `http://raka.com` → halaman dari HTTP server harus tampil.
-    
-7. **Verifikasi tambahan**: `ping raka.com` harus resolve menjadi `192.168.1.1` sebelum ping berjalan.
-    
+1. **Siapkan topology:** letakkan 1 switch, 2 PC, dan 1 Server (gunakan device "Server" di Packet Tracer).
+
+2. **Atur IP** pada tiap device sesuai tabel Topologi:
+
+   * FTP Server: `192.168.1.1/24`
+   * PC0: `192.168.1.2/24`
+   * PC1: `192.168.1.3/24`
+
+3. **Konfigurasikan FTP Server (Packet Tracer Server):**
+
+   * Klik device Server → tab `Config`.
+   * Aktifkan service **FTP** (centang/enable FTP service).
+   * Pada bagian `FTP` atau `User` (tergantung versi Packet Tracer), tambahkan user baru:
+
+     * **Username:** `raka`
+     * **Password:** (pilih password yang mudah diingat, contoh: `Raka123!`) — simpan.
+     * **Home Directory / Root:** tentukan folder root FTP (mis. `/ftp` atau `files`) — ini adalah direktori yang dapat diakses oleh user `raka`.
+     * Berikan permission penuh (read/write/delete) untuk user `raka` pada direktori tersebut.
+
+4. **Tambahkan file contoh:** pada file system Server (tab `File` atau `Desktop > File Manager`), buat atau unggah file `welcome.txt` atau `index.html` untuk diuji.
+
+5. **Set DNS/Hostname (opsional):** jika ingin memakai nama (mis. `ftp.raka.local`), Anda bisa menambahkan entry di hosts file PC (Desktop > IP Configuration > DNS atau Hosts) — namun pada lab sederhana, cukup gunakan IP.
+
+6. **Konfigurasikan IP Client:** pada masing-masing PC, atur IP statis seperti yang tertera dan pastikan NIC aktif.
+
+7. **Uji koneksi jaringan:** dari PC jalankan `ping 192.168.1.1` untuk memastikan konektivitas.
+
+8. **Tes FTP:**
+
+   * Buka aplikasi `File Transfer`/`FTP` client di Packet Tracer (atau `Command Prompt` jika ada):
+
+     * Host: `192.168.1.1`
+     * Username: `raka`
+     * Password: (password yang dibuat)
+   * Coba **login**, **upload** file ke direktori home, lalu **download** file yang sama di PC lain.
+
+9. **Verifikasi permission:** pastikan user `raka` dapat membuat, menghapus, dan mengunduh file di direktori FTP.
 
 ---
 
 ## 🔍 Expected Result / Verifikasi
 
-- `raka.com` terselesaikan (resolved) menjadi `192.168.1.1`.
-    
-- Browser pada PC1 & PC2 menampilkan halaman `index.html` dari HTTP server.
-    
-- Perintah `ping raka.com` berhasil (reply dari `192.168.1.1`).
-    
-- Jika `nslookup` tersedia: `nslookup raka.com 192.168.1.4` mengembalikan A record yang benar.
-    
+* PC0 dan PC1 dapat `ping 192.168.1.1` sukses (reply).
+* PC berhasil **login** ke FTP server menggunakan user `raka`.
+* PC dapat **mengunggah** file ke direktori FTP dan file tersebut muncul di File Manager server.
+* PC lain dapat **mengunduh** file yang sudah diunggah.
+* Jika menggunakan `ftp` via command: perintah `dir`/`ls` menampilkan daftar file di direktori home user.
 
----
-
-## 🛟 Troubleshooting (Masalah Umum & Solusi)
-
-- **Tidak bisa resolve nama?**
-    
-    - Pastikan DNS server IP tercantum di konfigurasi network client.
-        
-    - Cek service DNS di server (service DNS aktif dan A record benar).
-        
-- **Tidak bisa akses HTTP meski resolve benar?**
-    
-    - Periksa service HTTP aktif di server dan file `index.html` ada.
-        
-    - Pastikan firewall (jika digunakan) mengizinkan port 80.
-        
-- **Ping gagal antar device?**
-    
-    - Periksa subnet mask dan physical connection (cable + port switch).
-        
-    - Pastikan interface di server/PC dalam keadaan `up`.
-        
 
 ---
 
 ## 📌 Metadata
 
-- **Author:** Raka
-    
-- **Lab:** Konfigurasi DNS & HTTP Server
-    
-- **Tanggal:** 2025-08-30
-    
+* **Author:** Raka
+* **Lab:** Membuat FTP Server — Cisco Packet Tracer
+* **User FTP:** `raka` (akses penuh ke direktori FTP)
+* **Tanggal:** 2025-09-09
+
