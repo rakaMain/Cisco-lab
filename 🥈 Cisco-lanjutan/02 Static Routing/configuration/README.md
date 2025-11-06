@@ -1,39 +1,140 @@
-apa yang akan saya sampaikan
-1. apa itu routing
-2. routing table on a cisco
-3. routing fundamental
-4. jenis routing
-5. langsung membahas static routing praktic
-
-static routing practice
-konifgurasi konfigurasi dan isi dari ip route
-konfigurasi gateway nya juga
-
-static route mencari rute terbaik untuk meneuju kedestinasi
-atau bisa di tentukan dengan cara
-
-**next hop**
-ip route 192.168.4.0 255.255.255.0 [ 192.168.13.3( rute yang ingin di laui) ]
-atau bisa disebut next hop
-
-dan juga konfigurasi router yang lain untuk melncarkan sebuah ping
-
-**exit-interface** 
-ip add netmask exit-interface
-192.168.4.0 255.255.255.0 g0/1
-atau isa juga di tambahakn next-hop
-192.168.4.0 255.255.255.0 g0/1 192.168.13.3
-
-**default route**
-isi nya adalah 0.0.0.0/0 jadi menginput semua destinasi ip add
-jika gak ada spesifik pakai default route
-biasanya kalo ke internet
-
-ip route 0.0.0.0 0.0.0.0 203.0.113.2 => yang langsung ke internet
-
 
 ---
 
-Static routing adalah metode pengaturan rute di router di mana alamat tujuan dan jalur yang harus dilewati ditambahkan secara manual oleh administrator ke tabel routing. Dengan static route, router tidak perlu menjalankan protokol routing dinamis — ia hanya mengikuti instruksi yang sudah dikonfigurasi, sehingga sederhana, hemat sumber daya, dan sangat deterministik. Kelemahannya: tidak skalabel untuk jaringan besar dan tidak otomatis menyesuaikan jika terjadi perubahan topologi atau kegagalan jalur; setiap perubahan harus diubah secara manual oleh admin.
+## Format umum `ip route`
 
-Rute bus pariwisata yang tetap: bus hanya lewat rute yang sudah ditentukan; rute baru tidak otomatis ditambahkan
+Sintaks umum:
+
+```
+ip route <network> <netmask> <next-hop-ip | exit-interface> [administrative-distance]
+```
+
+Keterangan singkat:
+
+- `<network>` = jaringan tujuan (contoh `192.168.3.0`)
+    
+- `<netmask>` = netmask tujuan (contoh `255.255.255.0` untuk /24)
+    
+- `<next-hop-ip>` = alamat IP router selanjutnya (gateway) menuju network tujuan  
+    **atau**  
+    `<exit-interface>` = interface lokal (mis. `GigabitEthernet0/0`) untuk keluar paket
+    
+- `[administrative-distance]` = opsional, prioritas rute (angka kecil = lebih dipercaya)
+    
+
+---
+
+## R1 (baris yang kamu tulis)
+
+Asli:
+
+```
+ip route 192.168.3.0 2(ip tujuan) 255.255.255.0 192.168.12.2
+do sh ip route
+```
+
+**Interpretasi & koreksi**  
+Sepertinya ada kekacauan urutan/penulisan. Bentuk yang benar kemungkinan maksudnya:
+
+```
+ip route 192.168.3.0 255.255.255.0 192.168.12.2
+```
+
+Artinya:
+
+- Buat rute statis ke jaringan **192.168.3.0/24**
+    
+- Next-hop (gateway) adalah **192.168.12.2** — artinya R1 akan mengirim paket ke alamat ini untuk mencapai network 192.168.3.0.
+    
+- `do show ip route` (singkat `do sh ip route`) digunakan ketika kamu berada di mode konfigurasi (`config>`) untuk menjalankan perintah show — menampilkan tabel routing saat ini. (Di exec mode cukup `show ip route`.)
+    
+
+Di tabel routing rute ini akan tampil sebagai `S 192.168.3.0/24 [1/0] via 192.168.12.2` (S = static).
+
+---
+
+## R2
+
+Asli:
+
+```
+ip route 192.168.1.0/24 (ip asal) 255.255.255.0 g0/0
+ip route 192.168.3.0 2(ip tujuan) 255.255.255.0 192.168.13.3
+```
+
+**Interpretasi & koreksi**  
+Kemungkinan maksud baris pertama:
+
+```
+ip route 192.168.1.0 255.255.255.0 GigabitEthernet0/0
+```
+
+Artinya:
+
+- R2 menyatakan bahwa untuk mencapai **192.168.1.0/24**, paket dikirim keluar lewat interface **G0/0** (tanpa menyebut next-hop IP). Ini biasanya dipakai jika jaringan tujuan langsung terhubung ke segmen yang bisa dijangkau via interface tersebut.
+    
+
+Baris kedua yang dikoreksi:
+
+```
+ip route 192.168.3.0 255.255.255.0 192.168.13.3
+```
+
+Artinya:
+
+- Tambah rute statis ke **192.168.3.0/24** dengan next-hop **192.168.13.3**.
+    
+
+---
+
+## R3
+
+Asli:
+
+```
+ip route 192.168.1.0/24 (ip asal) 255.255.255.0 192.168.13.2
+```
+
+**Interpretasi & koreksi**  
+Bentuk yang benar kemungkinan:
+
+```
+ip route 192.168.1.0 255.255.255.0 192.168.13.2
+```
+
+Artinya:
+
+- R3 menambahkan rute statis ke **192.168.1.0/24** melalui next-hop **192.168.13.2**.
+    
+
+---
+
+## Ringkasan efek pada jaringan (secara logika)
+
+- R1 tahu cara mencapai 192.168.3.0 dengan mengirim ke 192.168.12.2.
+    
+- R2 tahu cara menuju 192.168.1.0 lewat interface G0/0 (langsung keluar) dan juga tahu 192.168.3.0 lewat 192.168.13.3.
+    
+- R3 tahu cara menuju 192.168.1.0 lewat 192.168.13.2.
+    
+
+Jika next-hop yang ditentukan **tidak reachable** (mis. alamat 192.168.12.2 tidak berada di jaringan yang terhubung), maka paket tidak akan dikirim dengan benar — static route bersifat _recursive_: router akan melakukan lookup ke routing table untuk mengetahui bagaimana mencapai next-hop itu.
+
+---
+
+## Catatan penting / best practices
+
+- **Urutan parameter penting**: selalu `network` lalu `mask` lalu `next-hop` atau `exit-interface`.
+    
+- Di IOS klasik, **jangan** tulis `192.168.1.0/24` dan mask bersamaan pada satu command — gunakan `192.168.1.0 255.255.255.0`. (Beberapa versi modern mendukung prefix-length, tapi umumnya pakai mask.)
+    
+- Kalau memakai **exit-interface** (mis. `GigabitEthernet0/0`) tanpa next-hop, pastikan interface itu berada pada segmen broadcast yang benar dan router lain ada di situ.
+    
+- Jika menggunakan **next-hop IP**, pastikan next-hop itu reachable (ada route/connected) — jika tidak, rute statis akan gagal digunakan.
+    
+- Untuk menghapus: `no ip route <network> <mask> <next-hop|interface>`.
+    
+- Untuk melihat rute statis di tabel routing: `show ip route` (akan ditandai `S`).
+    
+- Jika ingin fallback atau prioritas lain, tambahkan `administrative-distance` terakhir (mis. `ip route ... 192.168.13.3 200`).
+    
